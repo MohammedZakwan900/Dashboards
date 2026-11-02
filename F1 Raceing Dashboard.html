@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>F1 Race Intelligence</title>
+
+<style>
+:root {
+  --red: #e10600;
+  --background: #090909;
+  --text: #f5f5f5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.site-root {
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* NAVBAR */
+
+.navbar {
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5%;
+  background: #0c0c0c;
+  border-bottom: 1px solid #343434;
+  position: relative;
+  z-index: 5;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-decoration: none;
+}
+
+.brand-mark {
+  background: var(--red);
+  color: white;
+  padding: 4px 7px;
+  border-radius: 3px;
+  font-style: italic;
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links a {
+  color: #aaa;
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.nav-links a:hover {
+  color: white;
+}
+
+.menu-toggle {
+  display: none;
+  background: transparent;
+  color: white;
+  border: 1px solid #444;
+  padding: 8px 10px;
+}
+
+/* HERO SECTION */
+
+.hero {
+  min-height: 690px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  background:
+    radial-gradient(
+      ellipse at 72% 45%,
+      #384047 0%,
+      #171b1e 36%,
+      #080808 75%
+    );
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(22,0,0,.98) 0%,
+    rgba(24,0,0,.9) 35%,
+    rgba(5,5,5,.38) 72%,
+    rgba(0,0,0,.15) 100%
+  );
+}
+
+.hero-content {
+  width: min(1120px, 90%);
+  margin: auto;
+  padding: 88px 0 120px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-copy {
+  max-width: 610px;
+  margin-left: 28%;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ff2923;
+  background: rgba(225,6,0,.12);
+  border: 1px solid rgba(225,6,0,.4);
+  border-radius: 30px;
+  padding: 7px 14px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  font-weight: 800;
+}
+
+.pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f10;
+  box-shadow: 0 0 12px #f10;
+}
+
+h1 {
+  font-size: clamp(48px, 7vw, 82px);
+  line-height: .95;
+  margin: 25px 0 12px;
+  font-weight: 900;
+  letter-spacing: -3px;
+}
+
+h1 span {
+  color: var(--red);
+}
+
+.subtitle {
+  color: #a3a3a3;
+  letter-spacing: 5px;
+  font-size: 18px;
+  margin-bottom: 24px;
+}
+
+.description {
+  max-width: 490px;
+  color: #b7b7b7;
+  line-height: 1.8;
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 22px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  transition: .2s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  color: white;
+  background: var(--red);
+  box-shadow: 0 8px 24px rgba(225,6,0,.2);
+}
+
+.btn-outline {
+  border: 1px solid #666;
+  color: #eee;
+  background: rgba(0,0,0,.25);
+}
+
+/* HERO STATISTICS */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  max-width: 610px;
+  margin-top: 42px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(20,20,20,.62);
+  border-radius: 8px;
+}
+
+.stat {
+  padding: 17px 10px;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,.1);
+}
+
+.stat:last-child {
+  border-right: 0;
+}
+
+.stat strong {
+  display: block;
+  color: var(--red);
+  font-size: 26px;
+}
+
+.stat span {
+  display: block;
+  color: #999;
+  font-size: 8px;
+  letter-spacing: 1.2px;
+  margin-top: 5px;
+}
+
+/* SECTIONS */
+
+.section {
+  padding: 90px 5%;
+  background: #101010;
+  border-top: 1px solid #262626;
+}
+
+.section-inner {
+  max-width: 1120px;
+  margin: auto;
+}
+
+.section-kicker {
+  color: var(--red);
+  font-size: 10px;
+  letter-spacing: 3px;
+  font-weight: 900;
+}
+
+.section h2 {
+  font-size: clamp(28px,4vw,44px);
+  margin: 12px 0;
+}
+
+.section p {
+  color: #aaa;
+  line-height: 1.8;
+  max-width: 720px;
+}
+
+/* PROJECT CARDS */
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.feature {
+  padding: 24px;
+  border: 1px solid #303030;
+  background: #171717;
+  border-radius: 7px;
+}
+
+.feature b {
+  display: block;
+  color: white;
+  margin: 10px 0;
+}
+
+.feature span {
+  color: var(--red);
+  font-size: 22px;
+}
+
+/* TABLEAU DASHBOARDS */
+
+.dashboard-frame {
+  margin-top: 28px;
+  border: 1px solid #3a3a3a;
+  background: #151515;
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 250px;
+}
+
+.tableauPlaceholder {
+  position: relative;
+  width: 100%;
+  min-height: 650px;
+}
+
+.tableauPlaceholder object {
+  width: 100%;
+  height: 750px;
+  display: block;
+}
+
+/* FOOTER */
+
+footer {
+  padding: 28px 5%;
+  color: #777;
+  background: #080808;
+  border-top: 1px solid #292929;
+  font-size: 11px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* MOBILE RESPONSIVE */
+
+@media (max-width: 760px) {
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 58px;
+    left: 0;
+    right: 0;
+    padding: 18px 5%;
+    background: #101010;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .hero {
+    min-height: 720px;
+    align-items: flex-start;
+  }
+
+  .hero-content {
+    padding-top: 85px;
+  }
+
+  .hero-copy {
+    margin-left: 0;
+  }
+
+  .subtitle {
+    letter-spacing: 3px;
+    font-size: 13px;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2,1fr);
+  }
+
+  .stat:nth-child(2) {
+    border-right: 0;
+  }
+
+  .stat:nth-child(-n+2) {
+    border-bottom: 1px solid rgba(255,255,255,.1);
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="site-root" id="home">
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+  <a class="brand" href="#home">
+    <span class="brand-mark">F1</span>
+    RACE INTELLIGENCE
+  </a>
+
+  <button class="menu-toggle" id="menuToggle">☰</button>
+
+  <nav class="nav-links" id="navLinks">
+    <a href="#project">PROJECT</a>
+    <a href="#story">STORY</a>
+    <a href="#dashboard">DASHBOARD</a>
+  </nav>
+
+</header>
+
+<main>
+
+<!-- HERO SECTION -->
+
+<section class="hero">
+
+  <div class="hero-content">
+    <div class="hero-copy">
+
+      <div class="eyebrow">
+        <span class="pulse"></span>
+        LIVE RACE ANALYTICS PLATFORM
+      </div>
+
+      <h1>FORMULA <span>1</span></h1>
+
+      <div class="subtitle">
+        RACE INTELLIGENCE DASHBOARD
+      </div>
+
+      <p class="description">
+        Deep-dive analytics into Formula 1 Championship data —
+        from driver performance metrics and team strategy to
+        circuit analysis and historical championship trends.
+        Powered by Tableau visualization intelligence.
+      </p>
+
+      <div class="actions">
+        <a class="btn btn-primary" href="#dashboard">
+          VIEW DASHBOARD
+        </a>
+
+        <a class="btn btn-outline" href="#story">
+          EXPLORE STORY
+        </a>
+      </div>
+
+      <div class="stats">
+
+        <div class="stat">
+          <strong>17+</strong>
+          <span>SEASONS ANALYZED</span>
+        </div>
+
+        <div class="stat">
+          <strong>11K+</strong>
+          <span>RACES COVERED*</span>
+        </div>
+
+        <div class="stat">
+          <strong>20</strong>
+          <span>ACTIVE DRIVERS*</span>
+        </div>
+
+        <div class="stat">
+          <strong>10</strong>
+          <span>CONSTRUCTORS*</span>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+<!-- PROJECT SECTION -->
+
+<section class="section" id="project">
+
+  <div class="section-inner">
+
+    <div class="section-kicker">THE PROJECT</div>
+
+    <h2>Race data. Clear decisions.</h2>
+
+    <p>
+      Explore Formula 1 performance through an interactive
+      analytics experience. Compare drivers and constructors,
+      examine race outcomes, and discover how performance
+      changes across seasons and circuits.
+    </p>
+
+    <div class="feature-grid">
+
+      <article class="feature">
+        <span>01</span>
+        <b>Driver performance</b>
+        <p>Compare points, wins, podiums and reliability across the seasons.</p>
+      </article>
+
+      <article class="feature">
+        <span>02</span>
+        <b>Team intelligence</b>
+        <p>Understand constructor performance, championship trends and race outcomes.</p>
+      </article>
+
+      <article class="feature">
+        <span>03</span>
+        <b>Circuit analysis</b>
+        <p>Explore Grand Prix locations and country-wise participation.</p>
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- DASHBOARD SECTION -->
+
+<section class="section" id="dashboard">
+
+  <div class="section-inner">
+
+    <div class="section-kicker">INTERACTIVE ANALYTICS</div>
+
+    <h2>Explore the dashboards</h2>
+
+    <p>
+      Explore both Formula 1 Race Intelligence dashboards,
+      published on Tableau Public.
+    </p>
+
+    <h3>Dashboard 1 · Race Intelligence Overview</h3>
+
+    <div class="dashboard-frame">
+
+      <div class="tableauPlaceholder" id="viz1793535554045">
+
+        <noscript>
+          <a href="https://public.tableau.com/views/F1raceingD/Dashboard1">
+            View Dashboard 1
+          </a>
+        </noscript>
+
+        <object class="tableauViz" style="display:none;">
+
+          <param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F">
+          <param name="embed_code_version" value="3">
+          <param name="site_root" value="">
+          <param name="name" value="F1raceingD/Dashboard1">
+          <param name="tabs" value="no">
+          <param name="toolbar" value="yes">
+          <param name="static_image" value="https://public.tableau.com/static/images/F1/F1raceingD/Dashboard1/1.png">
+          <param name="display_static_image" value="yes">
+          <param name="display_spinner" value="yes">
+          <param name="display_overlay" value="yes">
+
+        </object>
+
+      </div>
+
+    </div>
+
+    <h3>Dashboard 2 · Additional Race Analysis</h3>
+
+    <div class="dashboard-frame">
+
+      <div class="tableauPlaceholder" id="viz1793627278830">
+
+        <noscript>
+          <a href="https://public.tableau.com/views/F1raceingD/Dashboard2">
+            View Dashboard 2
+          </a>
+        </noscript>
+
+        <object class="tableauViz" style="display:none;">
+
+          <param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F">
+          <param name="embed_code_version" value="3">
+          <param name="site_root" value="">
+          <param name="name" value="F1raceingD/Dashboard2">
+          <param name="tabs" value="no">
+          <param name="toolbar" value="yes">
+          <param name="static_image" value="https://public.tableau.com/static/images/F1/F1raceingD/Dashboard2/1.png">
+          <param name="filter" value="publish=yes">
+
+        </object>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- STORY SECTION -->
+
+<section class="section" id="story">
+
+  <div class="section-inner">
+
+    <div class="section-kicker">THE STORY</div>
+
+    <h2>The Main Story of Formula 1</h2>
+
+    <p>
+      Follow the Formula 1 story from a global overview
+      to championship success through this interactive Tableau story.
+    </p>
+
+    <div class="dashboard-frame">
+
+      <div class="tableauPlaceholder" id="viz1793627474097">
+
+        <noscript>
+          <a href="https://public.tableau.com/views/F1raceingD/Story1">
+            View Formula 1 Story
+          </a>
+        </noscript>
+
+        <object class="tableauViz" style="display:none;">
+
+          <param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F">
+          <param name="embed_code_version" value="3">
+          <param name="site_root" value="">
+          <param name="name" value="F1raceingD/Story1">
+          <param name="tabs" value="no">
+          <param name="toolbar" value="yes">
+          <param name="static_image" value="https://public.tableau.com/static/images/F1/F1raceingD/Story1/1.png">
+          <param name="filter" value="publish=yes">
+
+        </object>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+<!-- FOOTER -->
+
+<footer>
+  <span>© 2026 F1 RACE INTELLIGENCE · STUDENT ANALYTICS PROJECT</span>
+  <span>*Replace sample statistics with verified workbook totals.</span>
+</footer>
+
+</div>
+
+<!-- TABLEAU SCRIPT -->
+
+<script src="https://public.tableau.com/javascripts/api/viz_v1.js"></script>
+
+<script>
+
+const menuToggle = document.getElementById('menuToggle');
+const navLinks = document.getElementById('navLinks');
+
+menuToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+});
+
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+  });
+});
+
+</script>
+
+</body>
+</html>
